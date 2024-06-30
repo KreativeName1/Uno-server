@@ -61,34 +61,6 @@ docker-compose up
 ## Project structure
 ```
 Uno-server
-├─ .env
-├─ app
-│  ├─ Card.class.php
-│  ├─ CardColor.enum.php
-│  ├─ CardType.enum.php
-│  ├─ Collection.class.php
-│  ├─ DBConnection.class.php
-│  ├─ Game.class.php
-│  ├─ Player.class.php
-│  ├─ Room.class.php
-│  ├─ UserManager.class.php
-│  ├─ composer.json
-│  ├─ composer.lock
-│  ├─ server.class.php
-│  └─ vendor
-│     ├─ autoload.php
-├─ docker-compose.yml
-├─ Dockerfile
-└─ README.md
-
-```
-## Note
-This is my first online multiplayer game project. 
-
-## License
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-```
-Uno-server
 ├─ app
 │  ├─ Card.class.php
 │  ├─ CardColor.enum.php
@@ -112,3 +84,9 @@ Uno-server
 └─ README.md
 
 ```
+
+## Note
+This is my first online multiplayer game project. 
+
+## License
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
