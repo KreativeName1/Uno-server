@@ -18,7 +18,7 @@
 
 This is a PHP 8.3 WebSocket server for the Uno game. It is built using the Ratchet library. The server is responsible for managing the game state, rooms, and players. It also handles the communication between the clients and the server.
 The server is designed to be used with the [Uno-client]() project. (The client is not yet implemented).
-A MySQl database is used to manage the users (username, password).
+A SQLite database is used to manage the users (username, password).
 
 
 ## Features

@@ -1,62 +1,52 @@
 <?php
+
 namespace App;
+
 use Exception;
 use PDO;
 use PDOException;
+use Dotenv\Dotenv;
 
-class DBConnection {
-
-  private string $host;
-  private int $port;
-  private string $username;
-  private string $password;
-  private string $database;
+class DBConnection
+{
+  private string $databasePath;
 
   public ?PDO $pdo;
 
-  public function __construct() {
-    $this->readEnv();
+  public function __construct()
+  {
+    $this->databasePath = __DIR__ . "/../data/database.db";
+    echo "Database Path: $this->databasePath\n";
     try {
-      $this->pdo = new PDO("mysql:host=$this->host;port=$this->port;dbname=$this->database", $this->username, $this->password);
+      $this->pdo = new PDO("sqlite:$this->databasePath");
       $this->createUsersTable();
     } catch (PDOException $e) {
       throw new Exception("Database connection failed: " . $e->getMessage());
     }
   }
-  private function readEnv(): void {
-    $this->host = getenv('DB_HOST');
-    $this->port = getenv('DB_PORT');
-    $this->username = getenv('DB_USERNAME');
-    $this->password = getenv('DB_PASSWORD');
-    $this->database = getenv('DB_DATABASE');
-  }
-
-  private function createUsersTable(): void {
+  private function createUsersTable(): void
+  {
     $query = "CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      username VARCHAR(50) NOT NULL,
-      password VARCHAR(255) NOT NULL
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      password TEXT NOT NULL
     )";
     $this->pdo->exec($query);
   }
 
-
-
   public function query(string $query, array $params = [], array $types = []): array
   {
     $stmt = $this->pdo->prepare($query);
-    $i = 0;
     foreach ($params as $key => $value) {
-      $type = isset($types[$key]) ? $types[$key] : PDO::PARAM_STR;
+      $type = $types[$key] ?? PDO::PARAM_STR;
       $stmt->bindValue(":$key", $value, $type);
-      $i++;
     }
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $result;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function __destruct() {
+  public function __destruct()
+  {
     $this->pdo = null;
   }
 }

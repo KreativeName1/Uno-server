@@ -2,8 +2,9 @@
 namespace App;
 use Exception;
 use Ratchet\ConnectionInterface;
+use Ratchet\MessageComponentInterface;
 
-class GameServer {
+class GameServer  implements MessageComponentInterface {
   private Collection $rooms;
   private string $nextRoomIdentifier;
 
@@ -11,6 +12,7 @@ class GameServer {
 
   public function __construct() {
     $this->rooms = new Collection();
+    $this->userManager = new UserManager();
     $this->nextRoomIdentifier =  sha1(uniqid());
   }
 
@@ -28,7 +30,12 @@ class GameServer {
     }
   }
 
-  public function onMessage(ConnectionInterface $from, string $msg) {
+  public function onError(ConnectionInterface $conn, Exception $e) {
+    echo "An error has occurred: {$e->getMessage()}\n";
+    $conn->close();
+  }
+
+  public function onMessage(ConnectionInterface $from, mixed $msg) {
     echo "Message from {$from->resourceId}: $msg\n";
 
     $data = json_decode($msg);

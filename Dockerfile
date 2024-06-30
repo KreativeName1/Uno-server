@@ -1,11 +1,37 @@
 
-# install apache, php and mysql
-FROM php:8.3-apache
-COPY app/ /var/www/html/
-RUN rm -rf /var/www/html/tests
+FROM php:8.3-cli
 
-# copy .env file to the root directory
-COPY .env /var/www/html/.env
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    sqlite3 \
+    libsqlite3-dev
 
-# dont allow to access .env file from browser
-RUN echo "RedirectMatch 404 /\.env" > /var/www/html/.htaccess
+RUN docker-php-ext-install pdo_sqlite zip
+
+
+
+# install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+COPY ./app /app
+COPY .env /.env
+
+WORKDIR /app
+
+
+
+
+RUN composer install
+
+EXPOSE 9000
+
+RUN ls -la
+
+RUN mkdir /data
+RUN touch /data/database.db && chmod 777 /data/database.db
+
+
+CMD ["php", "startup.php"]
