@@ -17,8 +17,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 
 COPY ./app /app
-COPY .env /.env
-
 WORKDIR /app
 
 
