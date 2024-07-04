@@ -94,12 +94,20 @@ class GameServer  implements MessageComponentInterface {
 
     // Registers a new User using the UserManager
     else if ($data->type === "register") {
+      try {
       $this->userManager->register($data->username, $data->password);
+      } catch (Exception $e) {
+        $from->send($e->getMessage());
+      }
     }
 
     // Logs in a User using the UserManager
     else if ($data->type === "login") {
+      try {
       $this->userManager->login($data->username, $data->password);
+      } catch (Exception $e) {
+        $from->send($e->getMessage());
+      }
     }
 
     // Handles game actions using the Game class
